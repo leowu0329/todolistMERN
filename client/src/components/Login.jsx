@@ -7,11 +7,11 @@ const Login = () => {
     <div className="h-screen flex justify-center items-center transform -translate-y-16">
       <form action="" className="flex flex-col gap-6 max-w-xl w-full px-8">
         <div className="flex flex-col gap-2">
-          <label>Email</label>
+          <Label>Email</Label>
           <Input type="email" name="email" placeholder="Enter email" />
         </div>
         <div className="flex flex-col gap-2">
-          <label>Password</label>
+          <Label>Password</Label>
           <Input type="password" name="password" placeholder="Enter Password" />
         </div>
         <Button>Login</Button>

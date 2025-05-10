@@ -1,20 +1,75 @@
+import { useState, useEffect } from 'react';
 import { Label } from '../components/ui/label';
 import { Input } from '../components/ui/input';
 import { Button } from '../components/ui/button';
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { register } from '../actions/userActions';
+
 const Register = () => {
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState({ email: '', password: '' });
+  const [isLoading, setIsLoading] = useState(false);
+  const [state, setState] = useState({
+    success: null,
+    error: null,
+  });
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    try {
+      const result = await register(formData);
+      setState({ success: 'Registration successful!', error: null });
+      setTimeout(() => {
+        navigate('/login');
+      }, 2000);
+    } catch (error) {
+      setState({ success: null, error: error.message });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
   return (
     <div className="h-screen flex justify-center items-center transform -translate-y-16">
-      <form action="" className="flex flex-col gap-6 max-w-xl w-full px-8">
+      <form
+        onSubmit={handleSubmit}
+        className="flex flex-col gap-6 max-w-xl w-full px-8"
+      >
         <div className="flex flex-col gap-2">
-          <label>Email</label>
-          <Input type="email" name="email" placeholder="Enter email" />
+          <Label>Email</Label>
+          <Input
+            type="email"
+            name="email"
+            placeholder="Enter email"
+            value={formData.email}
+            onChange={handleChange}
+          />
         </div>
         <div className="flex flex-col gap-2">
-          <label>Password</label>
-          <Input type="password" name="password" placeholder="Enter Password" />
+          <Label>Password</Label>
+          <Input
+            type="password"
+            name="password"
+            placeholder="Enter Password"
+            value={formData.password}
+            onChange={handleChange}
+          />
         </div>
-        <Button>Register</Button>
+        {state.success && (
+          <span className="message successMsg">{state.success}</span>
+        )}
+        {state.error && (
+          <span className="message successMsg">{state.success}</span>
+        )}
+        <Button disabled={isLoading}>
+          {isLoading ? 'Registering' : 'Register'}
+        </Button>
         <span className="text-[#63657b] text-center">
           Already have an account?{' '}
           <Link
