@@ -1,43 +1,47 @@
-export async function register(previousState, formData) {
+export async function register(formData) {
   try {
-    const email = formData.get('email');
-    const password = formData.get('password');
-    const res = await fetch('http://localhost:3000/api/user/register', {
+    const res = await fetch('http://localhost:3000/api/auth/register', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        Accept: 'application/json',
       },
-      body: JSON.stringify({ email, password }),
+      credentials: 'include',
+      body: JSON.stringify(formData),
     });
-    const data = await res.json();
-    if (data?.error) {
-      return { ...previousState, error: data.error };
+
+    if (!res.ok) {
+      const data = await res.json();
+      throw new Error(data.error || '注册失败');
     }
-    return { error: null, success: data };
+
+    const data = await res.json();
+    return data;
   } catch (error) {
-    return { ...previousState, error: 'Something went wrong' };
+    throw new Error(error.message || '注册失败，请稍后重试');
   }
 }
 
-export async function login(previousState, formData) {
+export async function login(formData) {
   try {
-    const email = formData.get('email');
-    const password = formData.get('password');
-    console.log(email, password);
-    const res = await fetch('http://localhost:3000/api/user/login', {
+    const res = await fetch('http://localhost:3000/api/auth/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        Accept: 'application/json',
       },
       credentials: 'include',
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify(formData),
     });
-    const data = await res.json();
-    if (data?.error) {
-      return { ...previousState, error: data.error };
+
+    if (!res.ok) {
+      const data = await res.json();
+      throw new Error(data.error || '登录失败');
     }
-    return { error: null, success: data };
+
+    const data = await res.json();
+    return data;
   } catch (error) {
-    return { ...previousState, error: 'Something went wrong' };
+    throw new Error(error.message || '登录失败，请稍后重试');
   }
 }
