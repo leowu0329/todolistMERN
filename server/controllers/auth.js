@@ -1,5 +1,5 @@
 import { createError } from '../utils/error.js';
-import { connectDB } from '../utils/connect.js';
+import { connectToDB } from '../utils/connect.js';
 import User from '../models/userModel.js';
 import bcrypt from 'bcryptjs';
 
@@ -34,7 +34,7 @@ export async function login(reg, res, next) {
   if (!data.email || !data.password) {
     return next(createError(400, 'Missing fields'));
   }
-  await connectDB();
+  await connectToDB();
   const user = await User.findOne({ email: req.body.email });
   if (!user) {
     return next(createError(404, 'Invalid credentials'));
