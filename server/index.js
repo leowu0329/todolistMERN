@@ -3,12 +3,14 @@ import AuthRoute from './routes/auth.js';
 import TodoRoute from './routes/todo.js';
 import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
+import cookieParser from 'cookie-parser';
 
 const app = express();
 const PORT = 3000;
 
 dotenv.config();
 app.use(bodyParser.json());
+app.use(cookie());
 app.use('/api/auth', AuthRoute);
 app.use('/api/todos', TodoRoute);
 
