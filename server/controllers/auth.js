@@ -60,4 +60,15 @@ export async function login(reg, res, next) {
       data: user,
     });
 }
-export async function logout(reg, res, next) {}
+export async function logout(reg, res, next) {
+  res
+    .clearCookie('access_token', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+    })
+    .status(200)
+    .json({
+      status: 'success',
+      message: 'User logged out Successfully',
+    });
+}
